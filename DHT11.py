@@ -7,7 +7,7 @@ import Adafruit_DHT
 # Configuration
 sensor = Adafruit_DHT.DHT11
 platform = Adafruit_DHT
-pin = 4
+pin = 23
 retryCount = 3
 backupFile = "DHT11.json"
 
