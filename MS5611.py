@@ -9,37 +9,34 @@ busSelection = 1
 MS5611Address = 0x77
 backupFile = "MS5611.json"
 
+def ms5611_read_block(command):
+	data = bus.read_i2c_block_data(MS5611Address, command)
+	time.sleep(0.05)
+	return data
+	
+def ms5611_write_byte(data):
+	bus.write_byte(MS5611Address, data)
+	time.sleep(0.05)
+
 try:
 	# Bus init
 	bus = SMBus(busSelection)
 
 	# Read calibration data
-	C1 = bus.read_i2c_block_data(MS5611Address, 0xA2) #Pressure Sensitivity
-	time.sleep(0.05)
-	C2 = bus.read_i2c_block_data(MS5611Address, 0xA4) #Pressure Offset
-	time.sleep(0.05)
-	C3 = bus.read_i2c_block_data(MS5611Address, 0xA6) #Temperature coefficient of pressure sensitivity
-	time.sleep(0.05)
-	C4 = bus.read_i2c_block_data(MS5611Address, 0xA8) #Temperature coefficient of pressure offset
-	time.sleep(0.05)
-	C5 = bus.read_i2c_block_data(MS5611Address, 0xAA) #Reference temperature
-	time.sleep(0.05)
-	C6 = bus.read_i2c_block_data(MS5611Address, 0xAC) #Temperature coefficient of the temperature
-	time.sleep(0.05)
+	C1 = ms5611_read_block(0xA2) # Pressure Sensitivity
+	C2 = ms5611_read_block(0xA4) # Pressure Offset
+	C3 = ms5611_read_block(0xA6) # Temperature coefficient of pressure sensitivity
+	C4 = ms5611_read_block(0xA8) # Temperature coefficient of pressure offset
+	C5 = ms5611_read_block(0xAA) # Reference temperature
+	C6 = ms5611_read_block(0xAC) # Temperature coefficient of the temperature
 
 	# Pressure acquisition
-	bus.write_byte(MS5611Address, 0x48)
-	time.sleep(0.05)
-	# Pressure read
-	D1 = bus.read_i2c_block_data(MS5611Address, 0x00)  
-	time.sleep(0.05)
+	ms5611_write_byte(0x48)
+	D1 = ms5611_read_block(0x00)
 
 	# Temperature acquisition
-	bus.write_byte(MS5611Address, 0x58)
-	time.sleep(0.05)
-	# Temperature read
-	D2 = bus.read_i2c_block_data(MS5611Address, 0x00)
-	time.sleep(0.05)
+	ms5611_write_byte(0x58)
+	D2 = ms5611_read_block(0x00)
 
 	# Transform arrays into integer
 	C1 = C1[0] * 256.0 + C1[1]
@@ -65,6 +62,11 @@ try:
 	pressure = P/100.0
 	live = True
 except IOError:
+	temperature = None
+	pressure = None
+	
+# Fallback to last value on error
+if temperature is None or pressure is None or pressure < 800.0 or pressure > 1200.0:
 	# Fallback to last value on error
 	file = open(backupFile, "r")
 	data = json.load(file)
