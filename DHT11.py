@@ -8,11 +8,10 @@ import Adafruit_DHT
 sensor = Adafruit_DHT.DHT11
 platform = Adafruit_DHT
 pin = 23
-retryCount = 3
 backupFile = "DHT11.json"
 
 # Read sensor
-humidity, temperature = Adafruit_DHT.read_retry(sensor, pin, retryCount)
+humidity, temperature = Adafruit_DHT.read(sensor, pin)
 live = True
 
 # Fallback to last value on error
