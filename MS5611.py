@@ -7,6 +7,7 @@ from smbus import SMBus
 # Configuration
 busSelection = 1
 MS5611Address = 0x77
+pressureOffset = 24.5 # = 206 m altitude
 backupFile = "MS5611.json"
 
 def ms5611_read_block(command):
@@ -59,7 +60,7 @@ try:
 
 	# Build human friendly float
 	temperature = TEMP/100.0
-	pressure = P/100.0
+	pressure = P/100.0 + pressureOffset
 	live = True
 except IOError:
 	temperature = None
