@@ -26,7 +26,7 @@ class SenseHat2(object):
 			self.pressure    = self.data['pressure']
 			self.tempP       = self.data['tempP']
 			self.mesureTime  = self.data['mesureTime']
-		except Error:
+		except:
 			print 'Error loading data file'
 		
 	def saveDataFile(self):
