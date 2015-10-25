@@ -27,7 +27,7 @@ class SenseHat2(object):
 			self.tempP       = self.data['tempP']
 			self.mesureTime  = self.data['mesureTime']
 		except:
-			print 'Error loading data file'
+			print('Error loading data file')
 		
 	def saveDataFile(self):
 		try:
@@ -36,7 +36,7 @@ class SenseHat2(object):
 			json.dump(self.data, file)
 			file.close()
 		except IOError:
-			print 'Error saving data file'
+			print('Error saving data file')
 
 	def readSensor(self):
 		from sense_hat import SenseHat
@@ -53,14 +53,14 @@ class SenseHat2(object):
 			try:
 				self.readSensor()
 				self.saveDataFile()
-			except:
-				print 'Error reading sensor'
+			except OSError:
+				print('Error reading sensor')
 				self.humidity    = self.data['humidity']
 				self.tempH       = self.data['tempH']
 				self.pressure    = self.data['pressure']
 				self.tempP       = self.data['tempP']
-		print 'TempH: {0:.2f} *C - Humidity: {1:.2f} %'.format(self.tempH, self.humidity)
-		print 'TempP: {0:.2f} *C - Pressure: {1:.2f} mbar'.format(self.tempP, self.pressure)
+		print('TempH: {0:.2f} *C - Humidity: {1:.2f} %'.format(self.tempH, self.humidity))
+		print('TempP: {0:.2f} *C - Pressure: {1:.2f} mbar'.format(self.tempP, self.pressure))
 
 if __name__ == '__main__':
 	SenseHat2().main()

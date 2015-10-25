@@ -27,7 +27,7 @@ class MS5611(object):
 			self.temperature = self.data['temperature']
 			self.mesureTime  = self.data['mesureTime']
 		except:
-			print 'Error loading data file'
+			print('Error loading data file')
 		
 	def saveDataFile(self):
 		try:
@@ -36,7 +36,7 @@ class MS5611(object):
 			json.dump(self.data, file)
 			file.close()
 		except IOError:
-			print 'Error saving data file'
+			print('Error saving data file')
 
 	def ms5611_read_block(self, command):
 		data = self.bus.read_i2c_block_data(MS5611_ADDRESS, command)
@@ -98,10 +98,10 @@ class MS5611(object):
 				self.readSensor()
 				self.saveDataFile()
 			except IOError:
-				print 'Error reading sensor'
+				print('Error reading sensor')
 				self.pressure    = self.data['pressure']
 				self.temperature = self.data['temperature']
-		print 'Temperature: {0:.2f} *C - Pressure: {1:.2f} mbar'.format(self.temperature, self.pressure)
+		print('Temperature: {0:.2f} *C - Pressure: {1:.2f} mbar'.format(self.temperature, self.pressure))
 
 if __name__ == '__main__':
 	MS5611().main()
