@@ -1,0 +1,13 @@
+language: python
+
+sudo: false
+
+python:
+  - "3.6"
+  
+addons:
+  sonarcloud:
+    organization: "vrampal-bitbucket"
+
+script:
+  - sonar-scanner
